@@ -1,14 +1,21 @@
 import sys
+from typing import Any
+
+from src.logger import logging
 
 
 def error_message_detail(error, error_detail):
     _, _, exc_tb = error_detail.exc_info()
 
     file_name = exc_tb.tb_frame.f_code.co_filename
+    line_number = exc_tb.tb_lineno
 
-    error_message = "Error occurred in Python script [{0}] at line number [{1}]: {2}".format(
+    error_message = (
+        "Error occurred in Python script "
+        "[{0}] at line number [{1}]: {2}"
+    ).format(
         file_name,
-        exc_tb.tb_lineno,
+        line_number,
         str(error)
     )
 
@@ -17,7 +24,7 @@ def error_message_detail(error, error_detail):
 
 class CustomException(Exception):
 
-    def __init__(self, error_message, error_detail: sys):
+    def __init__(self, error_message, error_detail: Any):
         super().__init__(error_message)
 
         self.error_message = error_message_detail(
@@ -29,9 +36,11 @@ class CustomException(Exception):
         return self.error_message
 
 
-# Testing
-try:
-    a = 2 / 0
+if __name__ == "__main__":
 
-except Exception as e:
-    raise CustomException(e, sys)
+    try:
+        a = 2 / 0
+
+    except Exception as e:
+        logging.error("An error occurred: %s", e)
+        raise CustomException(e, sys)
