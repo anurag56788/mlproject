@@ -121,4 +121,12 @@ class DataTransformation:
                 
                 
 
-    
+if __name__ == "__main__":
+    data_transformation = DataTransformation()
+    data_transformation.iniate_data_transformation(
+        os.path.join("artifact", "train.csv"),
+        os.path.join("artifact", "test.csv"),
+    )
+
+
+
